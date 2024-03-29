@@ -1,6 +1,7 @@
-from django.urls import path
-from . import views
+from .views import TarefaModelViewSet
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path('tarefa/', views.TarefaModelViewSet.as_view(), name='tarefa'),
-]
+Trouter = DefaultRouter()
+Trouter.register(r'Tarefa', TarefaModelViewSet, basename='Tarefa')
+
+urlpatterns = Trouter.urls

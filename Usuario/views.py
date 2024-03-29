@@ -35,7 +35,7 @@ class UsuarioModelViewSet(ModelViewSet):
     # retornar os dados do usuário
     @action(methods=["get"], detail=False)
     def me(self, request):
-        usuario = Usuario.objects.get(Ente=request.user)
+        usuario = Usuario.objects.get(Vinculado=request.user)
         serial = UsuarioSerializer(usuario)
         return Response({'status': 302, 'Usuario': serial.data})
 
@@ -57,13 +57,13 @@ class UsuarioModelViewSet(ModelViewSet):
             usuario = User.objects.create(
                 username=username, password=hashed_password, email=email, first_name=name, last_name=" ")
             user = Usuario.objects.create(
-                Vinculado=usuario, telefone=tel, cpf=cpf)
+                Vinculado=usuario, Telefone=tel, cpf=cpf)
             usuario.save()
             user.save()
             return Response({'status': 201, 'msg': 'registered successfully'})
 
     # att um usuarioo
-    def update(self, request):
+    def patch(self, request):
         obj = Usuario.objects.get(Vinculado=request.user)
         name = request.data.get('first name')
         email = request.data.get('email')
@@ -78,7 +78,7 @@ class UsuarioModelViewSet(ModelViewSet):
         return Response({'status': 200, 'msg': 'OK'})
 
     def delete(self, request):
-        id = request.data.get('id')
+        id = request.GET.get('id')
         obj = Usuario.objects.get(id=id)
         obj.Vinculado.delete()
         obj.delete()

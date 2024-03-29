@@ -37,11 +37,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    'corsheaders',
+    'rest_framework',
+    'rest_framework.authtoken',
     'Tarefa',
-    'Usuario',
-    'restframework',
-    
+    'Usuario'
 ]
+
+APPEND_SLASH = True
+
+CORS_EXPOSE_HEADERS = [
+    "content-type",
+    "content-length",
+]
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -4,11 +4,10 @@ from .models import Tarefa
 from .serializer import TarefaSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from django.db.models import F
 from rest_framework.decorators import action
-from django.db.models import Q
 from rest_framework.response import Response
-from datetime import datetime
+from Usuario.models import Usuario
+
 
 class TarefaModelViewSet(ModelViewSet):
     # authenticacao
@@ -27,18 +26,31 @@ class TarefaModelViewSet(ModelViewSet):
             })
         return Response({'status': 204, 'msg': 'No Content'})
 
-    # criar um usuário
+    # retornar as tarefas por prioridade
+    @action(methods=["get"], detail=False)
+    def TafOrder(self, request):
+        # crescente, decrescente '-prioridade'
+        taf = Tarefa.objects.all().order_by('prioridade')
+        serial = TarefaSerializer(taf, many=True)
+        if len(serial.data) > 0:
+            return Response({
+                'status': 302, 'Lista de Prioridade': serial.data
+            })
+        return Response({'status': 204, 'msg': 'No Content'})
+
+    # criar uma tarefa
     def create(self, request):
         titulo = request.data.get('titulo')
         desc = request.data.get('descricao')
         data = request.data.get('data_vencimento')
         p = request.data.get('prioridade')
         status = request.data.get('status')
-        vinculo = request.user
-        Tarefa.objects.create(titulo=titulo,desc=desc, data_vencimento=data, prioridade=p, status=status, vinculo=vinculo)
+        vinculo = Usuario.objects.get(Vinculado=request.user)
+        Tarefa.objects.create(titulo=titulo, desc=desc, data_vencimento=data,
+                              prioridade=p, status=status, vinculo=vinculo)
         return Response({'status': 201, 'msg': 'registered successfully'})
 
-    def update(self, request):
+    def patch(self, request):
         id = request.data.get('id')
         taf = Tarefa.objects.get(id=id)
         titulo = request.data.get('titulo')
@@ -52,10 +64,10 @@ class TarefaModelViewSet(ModelViewSet):
         taf.prioridade = p
         taf.status = status
         taf.save()
-        return super().update(request)
+        return Response({'status': 200, 'msg': 'Updated!'})
 
     def delete(self, request):
-        id = request.data.get('id')
+        id = request.GET.get('id')
         taf = Tarefa.objects.get(id=id)
         taf.delete()
-        return super().destroy(request)
+        return Response({'status': 200, 'msg': 'Deleted!'})
