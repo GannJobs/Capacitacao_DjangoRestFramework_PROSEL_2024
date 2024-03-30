@@ -4,13 +4,9 @@ from .models import Usuario
 from .serializer import UsuarioSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from django.db.models import F
 from rest_framework.decorators import action
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import logout
-from django.db.models import Q
 from rest_framework.response import Response
-from datetime import datetime
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 

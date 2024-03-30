@@ -30,7 +30,8 @@ class TarefaModelViewSet(ModelViewSet):
     @action(methods=["get"], detail=False)
     def TafOrder(self, request):
         # crescente, decrescente '-prioridade'
-        taf = Tarefa.objects.all().order_by('prioridade')
+        Us = Usuario.objects.get(Vinculado=request.user)
+        taf = Tarefa.objects.filter(vinculo=Us).order_by('-prioridade')
         serial = TarefaSerializer(taf, many=True)
         if len(serial.data) > 0:
             return Response({
