@@ -20,11 +20,12 @@ pip install django djangorestframework
 ```
 django-admin startproject Seu_Projeto .
 ```
+# 2 Etapa
 - A partir daqui iremos utilizar o manage.py para tudo, começando criando nossos apps
 ```
 python manage.py startapp Seu_App
 ```
-- ... O resto será dado nos tutorias, mas caso faça o pull do repositorio, deve rodar os seguintes comandos
+- ... O resto das etapas será dada nos tutorias, mas caso faça o pull do repositorio, deve rodar os seguintes comandos
 - Criar seu banco de dados
 ```
 python manage.py makemigrations
